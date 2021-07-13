@@ -59,11 +59,11 @@ class GraphAnalysis:
             e = self.ic_edges[i]
             e_data = self.edges[e][2]
             # check if effort-controlled
-            if e_data['ctrl'] is 'e':
+            if e_data['ctrl'] == 'e':
                 # move edge at the top of edge list and set Lambda(edge) to 0
                 self.set_edge_ec(e)
             # check if flux-controlled
-            elif e_data['ctrl'] is 'f':
+            elif e_data['ctrl'] == 'f':
                 if self.Lambda[:, e].sum() == 1:
                     # edge 'e' imposes the potential on that node
                     # get node index
@@ -85,7 +85,7 @@ class GraphAnalysis:
         """
         temp = []
         for e in range(self.ne):
-            if self.get_edge_data(e, 'type') is 'storage':
+            if self.get_edge_data(e, 'type') == 'storage':
                 temp.append(e)
         return temp
 
@@ -96,7 +96,7 @@ class GraphAnalysis:
         """
         temp = []
         for e in range(self.ne):
-            if self.get_edge_data(e, 'type') is 'dissipative':
+            if self.get_edge_data(e, 'type') == 'dissipative':
                 temp.append(e)
         return temp
 
@@ -107,7 +107,7 @@ class GraphAnalysis:
         """
         temp = []
         for e in range(self.ne):
-            if self.get_edge_data(e, 'type') is 'port':
+            if self.get_edge_data(e, 'type') == 'port':
                 temp.append(e)
         return temp
 
@@ -118,7 +118,7 @@ class GraphAnalysis:
         """
         temp = []
         for e in range(self.ne):
-            if self.get_edge_data(e, 'type') is 'connector':
+            if self.get_edge_data(e, 'type') == 'connector':
                 temp.append(e)
         return temp
 
@@ -351,7 +351,7 @@ define it as effort-controlled (0 column in lambda).
         self.Lambda[:, 0] = 0
         # test for connector
         new_e = self.get_edges_data('label').index(e_label)
-        if self.get_edge_data(new_e, 'type') is 'connector':
+        if self.get_edge_data(new_e, 'type') == 'connector':
             # link realizability of the other edge of the connector
             self.link_connector(new_e, 'e')
         self.verbose('set_edge_ec')
@@ -377,7 +377,7 @@ controlled node from node list
         self.fc_edges = indices[-(nfc+1):]
         # test for connector
         new_e = self.get_edges_data('label').index(e_label)
-        if self.get_edge_data(new_e, 'type') is 'connector':
+        if self.get_edge_data(new_e, 'type') == 'connector':
             # link realizability of the other edge of the connector
             self.link_connector(new_e, 'f')
         self.verbose('set_edge_fc')
@@ -435,7 +435,7 @@ and the realizability of linked edge is chosen based on the connector type \
             print('link', e_label, self.get_edge_data(e, 'connector_type'),
                   ctrl, link_e_label)
         # get connector
-        if ctrl is 'e':
+        if ctrl == 'e':
             # gyrator case
             if self.get_edge_data(e, 'connector_type') == 'gyrator':
                 self.inverse_alpha(e)
@@ -459,7 +459,7 @@ compatible'.format(e_label, link_e_label)
                     # move edge at the end of edge list
                     self.set_edge_fc(link_e)
 
-        if ctrl is 'f':
+        if ctrl == 'f':
             # gyrator case
             if self.get_edge_data(e, 'connector_type') == 'gyrator':
                 # assert linked edge is not effort controlled
